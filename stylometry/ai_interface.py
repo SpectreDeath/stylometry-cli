@@ -1,10 +1,12 @@
 import json
 import urllib.error
 import urllib.request
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
 
 
-def analyze_stats_with_ai(summary: Dict[str, Any], api_base: str = "http://localhost:1234/v1", model: str = "local-model") -> str:
+def analyze_stats_with_ai(
+    summary: Dict[str, Any], api_base: str = "http://localhost:1234/v1", model: str = "local-model"
+) -> str:
     """
     Sends stylometric summary to a local LLM (like LM Studio) for interpretation.
     """

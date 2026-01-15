@@ -2,7 +2,7 @@ import datetime as _dt
 import json
 import shutil
 from pathlib import Path
-from typing import List, Optional, Any
+from typing import Any, List, Optional
 
 import pandas as pd
 

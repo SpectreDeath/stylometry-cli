@@ -220,9 +220,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     doc_df = pd.DataFrame(doc_rows) if doc_rows else pd.DataFrame(columns=["corpus", "doc_id"])
 
     chunk_rows = process_items(all_chunks, "Chunk Metrics")
-    
+
     summary: Dict[str, Any] = {"corpora": {}, "notes": []}
-    
+
     if args.stylo_metrix and chunk_rows:
         print("Extracting StyloMetrix signatures (this may take a moment)...")
         try:
