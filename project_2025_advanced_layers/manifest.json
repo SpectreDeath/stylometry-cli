@@ -1,0 +1,16 @@
+{
+  "corpus_id": "local-20260114T235117",
+  "retrieved_at": "2026-01-14T23:51:47Z",
+  "docs": [
+    {
+      "doc_id": "project2025",
+      "corpus": "Project2025",
+      "word_count_est": 303732
+    },
+    {
+      "doc_id": "wikistylometry",
+      "corpus": "WikiStylometry",
+      "word_count_est": 7834
+    }
+  ]
+}

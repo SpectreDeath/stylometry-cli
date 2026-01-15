@@ -1,0 +1,38 @@
+{
+  "bundle_id": "rb-artifacts-20260114T224434",
+  "produced_by": "ArtifactExtractor",
+  "artifacts": {
+    "files": [
+      "manifest.json",
+      "doc_metrics.csv",
+      "chunk_metrics.csv",
+      "plot_avg_sentence_len_boxplot.png",
+      "plot_mattr_boxplot.png"
+    ]
+  },
+  "key_findings": [
+    "Processed 3 docs.",
+    {
+      "Wiki": {
+        "docs": 1,
+        "chunks": 7,
+        "total_words_docs": 7834,
+        "avg_mattr": 0.5799072937968643,
+        "avg_yules_k": 52.97568143783091,
+        "avg_sentence_len": 12.164596273291925,
+        "avg_hapax_rate": 0.19696196068419708,
+        "avg_commas_per_1000w": 65.10084248149094
+      },
+      "Local": {
+        "docs": 2,
+        "chunks": 0,
+        "total_words_docs": 54,
+        "avg_mattr": 0.8681318681318682,
+        "avg_yules_k": 143.85339934790485,
+        "avg_sentence_len": 11.333333333333332,
+        "avg_hapax_rate": 0.7747252747252746,
+        "avg_commas_per_1000w": 109.8901098901099
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+corpus,doc_id,chunk_id,assigned_corpus,assignment_score
+Wiki,wiki,c0000,Wiki,0.8723410724319537
+Wiki,wiki,c0001,Wiki,0.8620428389654207
+Wiki,wiki,c0002,Wiki,0.8456099474907954
+Wiki,wiki,c0003,Wiki,0.8918555548028341
+Wiki,wiki,c0004,Wiki,0.7998342679302568
+Wiki,wiki,c0005,Wiki,0.7872080837700275
+Wiki,wiki,c0006,Wiki,0.8203252348747698
