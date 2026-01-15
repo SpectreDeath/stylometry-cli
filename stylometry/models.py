@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
+
 @dataclass
 class DocRecord:
     corpus: str
@@ -9,6 +10,7 @@ class DocRecord:
     text: str
     word_tokens: List[str]
     sentences: List[str]
+
 
 @dataclass
 class ChunkRecord:

@@ -1,6 +1,8 @@
 import collections
 from typing import List, Set
+
 from .models import DocRecord
+
 
 def find_boilerplate(docs: List[DocRecord], threshold: float = 0.5, min_len: int = 50) -> Set[int]:
     """
@@ -9,26 +11,27 @@ def find_boilerplate(docs: List[DocRecord], threshold: float = 0.5, min_len: int
     """
     if len(docs) < 3:
         return set()
-        
-    counts = collections.Counter()
+
+    counts: collections.Counter[str] = collections.Counter()
     for d in docs:
         paragraphs = {p.strip() for p in d.text.split("\n") if len(p.strip()) >= min_len}
         for p in paragraphs:
             counts[p] += 1
-            
+
     boilerplate_hashes = set()
     n_docs = len(docs)
     for p, count in counts.items():
         if count / n_docs >= threshold:
             boilerplate_hashes.add(hash(p))
-            
+
     return boilerplate_hashes
+
 
 def strip_boilerplate(docs: List[DocRecord], boilerplate_hashes: Set[int]):
     """Removes identified boilerplate paragraphs from documents in-place."""
     if not boilerplate_hashes:
         return
-        
+
     for d in docs:
         lines = d.text.split("\n")
         new_lines = []
@@ -39,7 +42,7 @@ def strip_boilerplate(docs: List[DocRecord], boilerplate_hashes: Set[int]):
             if hash(line.strip()) in boilerplate_hashes:
                 continue
             new_lines.append(line)
-        
+
         # Re-join and re-tokenize if changed
         new_text = "\n".join(new_lines).strip()
         if new_text != d.text.strip():

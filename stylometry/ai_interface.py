@@ -1,17 +1,14 @@
 import json
-import urllib.request
 import urllib.error
-from typing import Dict, List, Optional
+import urllib.request
+from typing import Dict, List, Optional, Any
 
-def analyze_stats_with_ai(
-    summary: Dict, 
-    api_base: str = "http://localhost:1234/v1", 
-    model: str = "local-model"
-) -> str:
+
+def analyze_stats_with_ai(summary: Dict[str, Any], api_base: str = "http://localhost:1234/v1", model: str = "local-model") -> str:
     """
     Sends stylometric summary to a local LLM (like LM Studio) for interpretation.
     """
-    
+
     # Construct the prompt
     stats_json = json.dumps(summary, indent=2)
     prompt = f"""
@@ -35,19 +32,19 @@ Format the output with clear Markdown headers. Keep it data-driven, analytical, 
         "model": model,
         "messages": [
             {"role": "system", "content": "You are a professional linguistic analyst specializing in stylometry."},
-            {"role": "user", "content": prompt}
+            {"role": "user", "content": prompt},
         ],
-        "temperature": 0.7
+        "temperature": 0.7,
     }
-    
+
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(f"{api_base.rstrip('/')}/chat/completions", data=data)
     req.add_header("Content-Type", "application/json")
-    
+
     try:
         with urllib.request.urlopen(req, timeout=120) as response:
             res_data = json.loads(response.read().decode("utf-8"))
-            return res_data["choices"][0]["message"]["content"]
+            return str(res_data["choices"][0]["message"]["content"])
     except urllib.error.URLError as e:
         return f"AI Analysis failed: Could not connect to LM Studio at {api_base}. Ensure the server is running. (Error: {e})"
     except Exception as e:

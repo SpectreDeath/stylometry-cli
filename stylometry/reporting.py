@@ -1,7 +1,8 @@
-from pathlib import Path
 import json
-import pandas as pd
+from pathlib import Path
 from typing import Dict, List, Optional
+
+import pandas as pd
 
 HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
@@ -527,18 +528,26 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 </html>
 """
 
-def generate_report(out_dir: Path, run_id: str, timestamp: str, summary: Dict, plot_files: List[str], 
-                    ai_insights: Optional[str] = None, doc_df: Optional[pd.DataFrame] = None,
-                    chunk_df: Optional[pd.DataFrame] = None):
+
+def generate_report(
+    out_dir: Path,
+    run_id: str,
+    timestamp: str,
+    summary: Dict,
+    plot_files: List[str],
+    ai_insights: Optional[str] = None,
+    doc_df: Optional[pd.DataFrame] = None,
+    chunk_df: Optional[pd.DataFrame] = None,
+):
     corpus_rows = ""
     total_docs = 0
     total_chunks = 0
-    
+
     for name, data in summary.get("corpora", {}).items():
         total_docs += data.get("docs", 0)
         total_chunks += data.get("chunks", 0)
         corpus_rows += f"<tr><td>{name}</td><td>{data.get('docs', 0)}</td><td>{data.get('chunks', 0)}</td><td>{data.get('total_words_docs', 0):,}</td></tr>"
-        
+
     findings = ""
     for note in summary.get("notes", []):
         findings += f"<li>{note}</li>"
@@ -553,7 +562,7 @@ def generate_report(out_dir: Path, run_id: str, timestamp: str, summary: Dict, p
     content = content.replace("{{num_corpora}}", str(len(summary.get("corpora", {}))))
     content = content.replace("{{corpus_rows}}", corpus_rows)
     content = content.replace("{{findings}}", findings)
-    
+
     # AI section
     if ai_insights:
         content = content.replace("{{ai_display}}", "block")
@@ -561,14 +570,14 @@ def generate_report(out_dir: Path, run_id: str, timestamp: str, summary: Dict, p
     else:
         content = content.replace("{{ai_display}}", "none")
         content = content.replace("{{ai_insights}}", "")
-    
+
     # Delta Matrix section
     delta_matrix = summary.get("burrows_delta", {})
     if delta_matrix:
         content = content.replace("{{delta_display}}", "block")
         headers = sorted(delta_matrix.keys())
         content = content.replace("{{delta_headers}}", "".join(f"<th>{h}</th>" for h in headers))
-        
+
         rows_html = ""
         for row_label in headers:
             row_data = delta_matrix[row_label]
@@ -577,8 +586,10 @@ def generate_report(out_dir: Path, run_id: str, timestamp: str, summary: Dict, p
                 val = row_data.get(col_label, 0)
                 style = ""
                 if row_label != col_label:
-                    if val < 0.8: style = 'style="background: #dcfce7;"'
-                    elif val > 1.5: style = 'style="background: #fee2e2;"'
+                    if val < 0.8:
+                        style = 'style="background: #dcfce7;"'
+                    elif val > 1.5:
+                        style = 'style="background: #fee2e2;"'
                 row_cells += f"<td {style}>{val:.4f}</td>"
             rows_html += f"<tr>{row_cells}</tr>"
         content = content.replace("{{delta_rows}}", rows_html)
@@ -595,7 +606,7 @@ def generate_report(out_dir: Path, run_id: str, timestamp: str, summary: Dict, p
         content = content.replace("{{semantic_display}}", "block")
         headers = sorted(semantic_matrix.keys())
         content = content.replace("{{semantic_headers}}", "".join(f"<th>{h}</th>" for h in headers))
-        
+
         rows_html = ""
         for row_label in headers:
             row_data = semantic_matrix[row_label]
@@ -605,8 +616,10 @@ def generate_report(out_dir: Path, run_id: str, timestamp: str, summary: Dict, p
                 # Highlight high values (Semantic Similarity)
                 style = ""
                 if row_label != col_label:
-                    if val > 0.85: style = 'style="background: #dcfce7;"'
-                    elif val < 0.70: style = 'style="background: #fee2e2;"'
+                    if val > 0.85:
+                        style = 'style="background: #dcfce7;"'
+                    elif val < 0.70:
+                        style = 'style="background: #fee2e2;"'
                 row_cells += f"<td {style}>{val:.4f}</td>"
             rows_html += f"<tr>{row_cells}</tr>"
         content = content.replace("{{semantic_rows}}", rows_html)
@@ -628,10 +641,26 @@ def generate_report(out_dir: Path, run_id: str, timestamp: str, summary: Dict, p
     if chunk_df is not None:
         chunk_cols = cols + ["chunk_id", "sent_lens"]
         # Add StyloMetrix keys
-        exclude_core = ["corpus", "doc_id", "chunk_id", "mattr", "avg_sentence_len", "word_count", "yules_k", "path", "sent_lens", "chunk_text", "assigned_corpus"]
-        sm_cols = [c for c in chunk_df.columns if c not in exclude_core and not c.startswith("fw_") and not c.startswith("punct_")]
+        exclude_core = [
+            "corpus",
+            "doc_id",
+            "chunk_id",
+            "mattr",
+            "avg_sentence_len",
+            "word_count",
+            "yules_k",
+            "path",
+            "sent_lens",
+            "chunk_text",
+            "assigned_corpus",
+        ]
+        sm_cols = [
+            c
+            for c in chunk_df.columns
+            if c not in exclude_core and not c.startswith("fw_") and not c.startswith("punct_")
+        ]
         chunk_cols += sm_cols
-        
+
         chunk_json = chunk_df[chunk_cols].to_json(orient="records")
         content = content.replace("{{chunk_json}}", chunk_json)
     else:
