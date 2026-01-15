@@ -4,7 +4,10 @@ import logging
 import numpy as np
 import pandas as pd
 from typing import Dict, List, Sequence, Tuple, Optional
-from stylo_metrix import StyloMetrix
+try:
+    from stylo_metrix import StyloMetrix
+except ImportError:
+    StyloMetrix = None
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.decomposition import PCA
@@ -137,8 +140,12 @@ def compute_metrics_for_text(word_tokens: List[str], sentences: List[str], raw_t
 
 _SM_INSTANCE: Optional[StyloMetrix] = None
 
-def get_sm_instance(lang: str = "en") -> StyloMetrix:
+def get_sm_instance(lang: str = "en"):
     global _SM_INSTANCE
+    
+    if StyloMetrix is None:
+        raise ImportError("StyloMetrix is not installed. Install with 'pip install stylometry-cli[stylometrix]' or 'pip install stylo_metrix' to use this feature.")
+
     if _SM_INSTANCE is None:
         try:
             _SM_INSTANCE = StyloMetrix(lang)
