@@ -93,5 +93,16 @@ stylometry_out_*/
 test_*/
 *.zip
 
+
 # Spacy models (large)
 en_core_web_*/
+
+# Private/Test Data
+project_2025_*/
+final_full_run/
+live_ai_run/
+rw_python_pdf_analysis/
+web_analysis_report/
+test_*/
+stylometry_out_*/
+corpora/
