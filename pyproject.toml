@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "stylometry-cli"
-version = "1.0.0"
+version = "1.0.2"
 description = "Quantitative author fingerprinting & stylometric analysis - offline CLI tool"
 readme = "README.md"
 license = {text = "MIT"}
